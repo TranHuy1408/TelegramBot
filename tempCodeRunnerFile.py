@@ -4,6 +4,14 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import requests
 from bs4 import BeautifulSoup
 
+# Hàm gửi tin nhắn cập nhật thông tin thời tiết
+async def send_periodic_weather_info(context):
+    while True:
+        await asyncio.sleep(1800)  # Chờ 1800 giây (30 phút)
+        weather_info = get_weather_info()
+        group_id = -4151032640  # ID của nhóm, thay thế bằng ID thực tế của nhóm
+        await send_weather_info(context, group_id, weather_info)
+
 # Hàm lấy thông tin thời tiết từ trang web
 def get_weather_info():
     weather_info = []
@@ -23,29 +31,14 @@ async def send_weather_info(context, group_id, weather_info):
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'Chào bạn {update.effective_user.first_name}')
 
-# Xử lý lệnh /weather
-async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    # Lấy thông tin thời tiết và gửi lên nhóm
-    weather_info = get_weather_info()
-    group_id = update.message.chat_id
-    await send_weather_info(context, group_id, weather_info)
-
-    # Lập lịch gửi thông tin cập nhật dự báo thời tiết mỗi 30 phút
-    job_queue = context.job_queue
-    job_queue.run_repeating(send_periodic_weather_info, interval=1800, first=0, context=update.message.chat_id)
-
-# Hàm gửi thông tin cập nhật dự báo thời tiết mỗi 30 phút
-async def send_periodic_weather_info(context):
-    weather_info = get_weather_info()
-    group_id = context.job.context
-    await send_weather_info(context, group_id, weather_info)
-
 # Khởi tạo ứng dụng
-app = ApplicationBuilder().token("YOUR_TELEGRAM_BOT_TOKEN").build()
+app = ApplicationBuilder().token("7119007732:AAE73mlsHrsqXNXTuOUiZ7ErCiZlabAzoGg").build()
 
 # Thêm xử lý lệnh
 app.add_handler(CommandHandler("hello", hello))
-app.add_handler(CommandHandler("weather", weather))
+
+# Thêm công việc lập lịch
+app.job_queue.run_repeating(send_periodic_weather_info, interval=1800, first=0)
 
 # Khởi động ứng dụng
 app.run_polling()
