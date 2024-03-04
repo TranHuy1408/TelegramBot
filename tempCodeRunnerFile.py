@@ -18,7 +18,7 @@ def get_weather_info_with_images():
     weather_images = []
     response = requests.get('https://nchmf.gov.vn/Kttvsite/vi-VN/1/da-nang-w55.html#')
     soup = BeautifulSoup(response.text, 'html.parser')
-    mydivs = soup.find_all('ul', class_='list-info-wt uk-list')
+    mydivs = soup.find_all('div', class_='text-weather-location fix-weather-location')
     for div in mydivs:
         weather_info.append(div.text.strip())
         images = div.find_all('img')  # Tìm tất cả các thẻ <img> trong div
