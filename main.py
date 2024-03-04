@@ -41,7 +41,11 @@ async def send_periodic_weather_info(context):
     await send_weather_info(context, group_id, weather_info)
 
 # Khởi tạo ứng dụng
-app = ApplicationBuilder().token("YOUR_TELEGRAM_BOT_TOKEN").build()
+app = ApplicationBuilder().token("7119007732:AAE73mlsHrsqXNXTuOUiZ7ErCiZlabAzoGg").build()
+
+
+# Dừng toàn bộ các phiên bản trước của bot (nếu có)
+app.updater.stop_polling()
 
 # Thêm xử lý lệnh
 app.add_handler(CommandHandler("hello", hello))
