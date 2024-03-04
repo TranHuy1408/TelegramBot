@@ -45,7 +45,7 @@ app = ApplicationBuilder().token("7119007732:AAE73mlsHrsqXNXTuOUiZ7ErCiZlabAzoGg
 
 
 # Dừng toàn bộ các phiên bản trước của bot (nếu có)
-app.updater.stop_polling()
+app.updater._stop_polling()
 
 # Thêm xử lý lệnh
 app.add_handler(CommandHandler("hello", hello))
